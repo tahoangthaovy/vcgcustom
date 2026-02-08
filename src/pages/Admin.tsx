@@ -4,15 +4,16 @@ import MatchForm from "@/components/MatchForm";
 import MatchManagement from "@/components/MatchManagement";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, RotateCcw, Loader2, Plus, Settings } from "lucide-react";
+import { Shield, RotateCcw, Loader2, Plus, Settings, User } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Admin = () => {
-  const [modName, setModName] = useState("");
+  const { displayName } = useAuth();
   const [resetting, setResetting] = useState(false);
+
+  const modName = displayName || "Moderator";
 
   const handleResetScores = async () => {
     if (!confirm("Bạn có chắc muốn reset toàn bộ điểm về 0?")) return;
@@ -43,20 +44,13 @@ const Admin = () => {
             </h1>
           </div>
           <p className="text-muted-foreground">Quản lý trận đấu VCG</p>
+          <div className="flex items-center justify-center gap-1 mt-2 text-sm text-primary">
+            <User className="h-4 w-4" />
+            <span className="font-medium">{modName}</span>
+          </div>
         </div>
 
         <div className="card-gaming p-6 space-y-6">
-          {/* Mod name input */}
-          <div className="space-y-2">
-            <Label className="font-gaming text-sm">📝 Tên Moderator</Label>
-            <Input
-              value={modName}
-              onChange={(e) => setModName(e.target.value)}
-              placeholder="Nhập tên mod..."
-              className="bg-secondary border-border"
-            />
-          </div>
-
           <Tabs defaultValue="add" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-secondary">
               <TabsTrigger value="add" className="font-gaming text-xs">
@@ -70,13 +64,7 @@ const Admin = () => {
             </TabsList>
 
             <TabsContent value="add" className="mt-4">
-              {modName.trim() ? (
-                <MatchForm moderatorName={modName.trim()} />
-              ) : (
-                <p className="text-center text-muted-foreground text-sm py-8">
-                  Vui lòng nhập tên moderator để bắt đầu
-                </p>
-              )}
+              <MatchForm moderatorName={modName} />
             </TabsContent>
 
             <TabsContent value="manage" className="mt-4">

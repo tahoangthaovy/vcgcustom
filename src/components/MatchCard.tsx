@@ -20,7 +20,6 @@ const MatchCard = ({ match }: MatchCardProps) => {
   const modeColors: Record<string, string> = {
     "ARAM Hỗn Loạn": "bg-primary/20 text-primary",
     "ARAM Thường": "bg-accent/20 text-accent",
-    "ARURF": "bg-destructive/20 text-destructive",
   };
 
   return (
